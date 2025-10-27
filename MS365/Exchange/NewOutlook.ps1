@@ -3,15 +3,32 @@ Import-Module ExchangeOnlineManagement
 Connect-ExchangeOnline
 
 Function DisableNewOutlookForOrganisation {
-    $mailbox = Get-User -ResultSize unlimited -Filter "(RecipientType -eq 'UserMailbox')"
+    Write-Host "`n[INFO] Disable new Outlook on the tenant..." -ForegroundColor Cyan
 
-    $mailbox | foreach {Set-CASMailbox -Identity $_.MicrosoftOnlineServicesID -OneWinNativeOutlookEnabled $false}
+    try {
+        $mailbox = Get-User -ResultSize unlimited -Filter "(RecipientType -eq 'UserMailbox')"
+        $mailbox | foreach {Set-CASMailbox -Identity $_.MicrosoftOnlineServicesID -OneWinNativeOutlookEnabled $false}
+        Write-Host "✅ New Outlook is disabled" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "❌ Impossible to disable new Outlook on the tenant" -ForegroundColor Red
+        Write-Host $_.Exception.Message -ForegroundColor DarkRed
+    }
+    
 }
 
 Function EnableNewOutlookForOrganisation {
-    $mailbox = Get-User -ResultSize unlimited -Filter "(RecipientType -eq 'UserMailbox')"
+    Write-Host "`n[INFO] Enable new Outlook on the tenant..." -ForegroundColor Cyan
 
-    $mailbox | foreach {Set-CASMailbox -Identity $_.MicrosoftOnlineServicesID -OneWinNativeOutlookEnabled $true}
+    try {
+        $mailbox = Get-User -ResultSize unlimited -Filter "(RecipientType -eq 'UserMailbox')"
+        $mailbox | foreach {Set-CASMailbox -Identity $_.MicrosoftOnlineServicesID -OneWinNativeOutlookEnabled $false}
+        Write-Host "✅ New Outlook is enabled" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "❌ Impossible to enable new Outlook on the tenant" -ForegroundColor Red
+        Write-Host $_.Exception.Message -ForegroundColor DarkRed
+    }
 }
 
 Function DisableNewOutlookForOneUser {
@@ -19,7 +36,16 @@ Function DisableNewOutlookForOneUser {
         $UserEmail
     )
 
-    Set-CASMailbox -Identity $UserEmail -OneWinNativeOutlookEnabled $false
+    Write-Host "`n[INFO] Disable new Outlook for one user..." -ForegroundColor Cyan
+
+    try {
+        Set-CASMailbox -Identity $UserEmail -OneWinNativeOutlookEnabled $false
+        Write-Host "✅ New Outlook is disabled for user : $UserEmail" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "❌ Impossible to disable new Outlook for user : $UserEmail" -ForegroundColor Red
+        Write-Host $_.Exception.Message -ForegroundColor DarkRed
+    }
 }
 
 Function EnableNewOutlookForOneUser {
@@ -27,7 +53,16 @@ Function EnableNewOutlookForOneUser {
         $UserEmail
     )
 
-    Set-CASMailbox -Identity $UserEmail -OneWinNativeOutlookEnabled $true
+    Write-Host "`n[INFO] Enable new Outlook for one user..." -ForegroundColor Cyan
+
+    try {
+        Set-CASMailbox -Identity $UserEmail -OneWinNativeOutlookEnabled $true
+        Write-Host "✅ New Outlook is enabled for user : $UserEmail" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "❌ Impossible to enable new Outlook for user : $UserEmail" -ForegroundColor Red
+        Write-Host $_.Exception.Message -ForegroundColor DarkRed
+    }
 }
 
 do
