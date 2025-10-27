@@ -20,3 +20,5 @@ try {
     Write-Host "❌ Impossible to set mailbox to french for user : $Email" -ForegroundColor Red
     Write-Host $_.Exception.Message -ForegroundColor DarkRed
 }
+
+Disconnect-ExchangeOnline -Confirm:$false

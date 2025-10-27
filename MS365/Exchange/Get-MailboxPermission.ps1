@@ -36,3 +36,5 @@ if ($Results.Count -eq 0) {
     Write-Host "✅ Results exported to $CsvPath" -ForegroundColor Green
     Start-Process $CsvPath
 }
+
+Disconnect-ExchangeOnline -Confirm:$false

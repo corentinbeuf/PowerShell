@@ -87,6 +87,10 @@ do
         } '4' {
             $email = Read-Host "Please enter user email :"
             EnableNewOutlookForOneUser -UserEmail $email
+        } 'q' {
+            Disconnect-ExchangeOnline -Confirm:$false
+            return
         }
     }
 }
+until ($input -eq 'q')
