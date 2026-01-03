@@ -24,7 +24,7 @@ foreach ($printer in $printers)
     $printJobsCount = $printJobs.Count
 
     if ($printJobsCount -ge 50) {
-        Add-Content -Path $logFile -Value "Il y a $printJobsCount impression en attente sur l'imprimante '$($printer.Name)'"
+        Add-Content -Path $logFile -Value "There are $printJobsCount print jobs in waiting status on the printer '$($printer.Name)'"
     } else {
         Write-Host
     }
@@ -32,8 +32,8 @@ foreach ($printer in $printers)
 
 # === Send mail with attachement ===
 if ((Get-Item $logFile).Length -gt 0) {
-    Send-MailMessage -SmtpServer $smtpServer -From "admin@piroux.com" -To $To -Subject $subject -Body $body -Attachments $logFile -BodyAsHtml
-    Remove-Item $logFil
+    Send-MailMessage -SmtpServer $smtpServer -From "admin@example.com" -To $To -Subject $subject -Body $body -Attachments $logFile -BodyAsHtml
+    Remove-Item $logFile
 } else {
     Remove-Item $logFile
 }
