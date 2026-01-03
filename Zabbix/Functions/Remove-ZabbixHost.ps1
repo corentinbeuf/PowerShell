@@ -10,6 +10,12 @@ function Remove-ZabbixHost {
     }).result.hostid
 
     if ($hostId) {
-        Invoke-ZabbixAPI "host.delete" @(@($hostId))
+        $response = Invoke-ZabbixAPI "host.delete" @(@($hostId))
+
+        if ($response.error) {
+            Write-Error "Erreur création hôte : $($response.error.message)"
+        } else {
+            Write-Host "Hôte '$HostName' supprimé avec succès !" -ForegroundColor Green
+        }
     }
 }
