@@ -170,7 +170,7 @@ if ($AlertItems.Count -gt 0) {
 
     foreach ($Item in ($AlertItems | Sort-Object DaysLeft)) {
         $RowClass = if ($Item.ExpireStatus -eq "Expired") { "expired" } else { "expiring" }
-        $StatusText = if ($Item.ExpireStatus -eq "Expired") { "🔴 EXPIRÉ" } else { "🟠 EXPIRE BIENTÔT" }
+        $StatusText = if ($Item.ExpireStatus -eq "Expired") { "🔴 EXPIRED" } else { "🟠 EXPIRING SOON" }
         
         $EmailBody += @"
         <tr class="$RowClass">
