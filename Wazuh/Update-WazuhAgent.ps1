@@ -31,6 +31,8 @@ param(
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
+$WazuhServiceName = "WazuhSvc"
+
 if (!(Test-Path "C:\Temp")) {
     Write-Host "`n[INFO] Create temp folder..." -ForegroundColor Cyan
     New-Item -Path "C:\Temp" -Type Directory | Out-Null
@@ -42,6 +44,11 @@ Invoke-WebRequest -Uri "https://packages.wazuh.com/4.x/windows/wazuh-agent-$($Ve
 Write-Host "`n[INFO] Start update of Wazuh agent..." -ForegroundColor Cyan
 # Start-Process "C:\Temp\wazuh-agent-$($Version)-1.msi" -Wait
 C:\Temp\wazuh-agent-$($Version)-1.msi /q 
+
+if (!(Get-Service -Name $WazuhServiceName).Status -eq "Running") {
+    Write-Host "`n[INFO] Start Wazuh service..." -ForegroundColor Cyan
+    Start-Service -Name $WazuhServiceName | Out-Null
+}
 
 if ((Test-Path "C:\Temp")) {
     Write-Host "`n[INFO] Remove temp folder..." -ForegroundColor Cyan
