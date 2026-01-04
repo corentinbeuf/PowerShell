@@ -42,15 +42,24 @@ Write-Host "`n[INFO] Download version $version of Wazuh agent..." -ForegroundCol
 Invoke-WebRequest -Uri "https://packages.wazuh.com/4.x/windows/wazuh-agent-$($Version)-1.msi" -OutFile "C:\Temp\wazuh-agent-$($Version)-1.msi" -UseBasicParsing | Out-Null
 
 Write-Host "`n[INFO] Start update of Wazuh agent..." -ForegroundColor Cyan
-# Start-Process "C:\Temp\wazuh-agent-$($Version)-1.msi" -Wait
-C:\Temp\wazuh-agent-$($Version)-1.msi /q 
+msiexec.exe /i C:\Temp\wazuh-agent-$Version-1.msi /q /wait
 
-if (!(Get-Service -Name $WazuhServiceName).Status -eq "Running") {
-    Write-Host "`n[INFO] Start Wazuh service..." -ForegroundColor Cyan
-    Start-Service -Name $WazuhServiceName | Out-Null
+$Service = Get-Service -Name $WazuhServiceName -ErrorAction SilentlyContinue
+if ($Service) {
+    if ($Service.Status -ne "Running") {
+        Write-Host "`n[INFO] Start Wazuh service..." -ForegroundColor Cyan
+        Start-Service -Name $WazuhServiceName
+        Write-Host "✅ Service started successfully" -ForegroundColor Green
+    } else {
+        Write-Host "`n[WARNING] Wazuh service is already running" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "`n❌ Wazuh service not found" -ForegroundColor Red
 }
 
 if ((Test-Path "C:\Temp")) {
     Write-Host "`n[INFO] Remove temp folder..." -ForegroundColor Cyan
     Remove-Item -Path "C:\Temp" -Recurse | Out-Null
 }
+
+Write-Host "`n✅ Wazuh agent update completed" -ForegroundColor Green
