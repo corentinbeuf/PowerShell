@@ -42,7 +42,7 @@ Write-Host "`n[INFO] Download version $version of Wazuh agent..." -ForegroundCol
 Invoke-WebRequest -Uri "https://packages.wazuh.com/4.x/windows/wazuh-agent-$($Version)-1.msi" -OutFile "C:\Temp\wazuh-agent-$($Version)-1.msi" -UseBasicParsing | Out-Null
 
 Write-Host "`n[INFO] Start update of Wazuh agent..." -ForegroundColor Cyan
-msiexec.exe /i C:\Temp\wazuh-agent-$Version-1.msi /q /wait
+msiexec.exe /i C:\Temp\wazuh-agent-$Version-1.msi /q | Out-Null
 
 $Service = Get-Service -Name $WazuhServiceName -ErrorAction SilentlyContinue
 if ($Service) {
